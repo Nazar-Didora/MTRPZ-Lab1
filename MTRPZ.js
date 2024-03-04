@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+
 const markdownCloseCheck = (indexes) => {
     if (indexes.length % 2 !== 0) {
         console.log(`Invalid markdown, tags not closed`)
@@ -141,8 +144,89 @@ const parseMarkdown = (markdown) => {
     if (!isCorrect) {
         return false
     }
+    let pointer = 0
+    let boldFlag = false
+    let monospacedFlag = false
+    let preformattedFlag = false
+    let italicFlag = false
+    let html = '<p>'
+    while (pointer < markdown.length) {
+        if (bolds.includes(pointer)) {
+            if (!boldFlag) {
+                html += '<b>'
+            } else {
+                html += '</b>'
+            }
+            boldFlag = !boldFlag
+            pointer += 2
+        } else if (italics.includes(pointer)) {
+            if (!italicFlag) {
+                html += '<i>'
+            } else {
+                html += '</i>'
+            }
+            italicFlag = !italicFlag
+            pointer++
+        } else if (monospaceds.includes(pointer)) {
+            if (!monospacedFlag) {
+                html += '<code>'
+            } else {
+                html += '</code>'
+            }
+            monospacedFlag = !monospacedFlag
+            pointer++
+        } else if (preformatteds.includes(pointer)) {
+            if (!preformattedFlag) {
+                html += '<pre>'
+            } else {
+                html += '</pre>'
+            }
+            preformattedFlag = !preformattedFlag
+            pointer += 3
+        } else if (newParagraphs.includes(pointer)) {
+            html += '</p><p>'
+            pointer += 2
+        } else {
+            html += markdown[pointer]
+            pointer++
+        }
+    }
+    html += '</p>'
+    return html
 }
 
+const editPath = (path) => {
+    return path.join(__dirname, path)
+}
 
+const args = process.argv
 
-parseMarkdown("**Test**");
+const argOut = args.indexOf('--out')
+const outPath = argOut !== -1 ? args[argOut + 1] : null
+
+const argFrom = args.indexOf('--from')
+const fromPath = argFrom !== -1 ? args[argFrom + 1] : null
+
+const argFuLLFromPath = fromPath !== null ? editPath(fromPath) : null
+const fullOutPath = outPath !== null ? editPath(outPath) : null
+
+const readFile = () => {
+    if (!fromPath) {
+        return 'Base case test:\n```_Test_ ``` `Try` **Hello world** ?'
+    }
+    return fs.readFileSync(argFuLLFromPath, {
+        encoding: 'utf8',
+    })
+}
+
+const MARKDOWN = readFile()
+
+const HTML = parseMarkdown(MARKDOWN)
+if (!HTML) {
+    return
+}
+console.log('result:', HTML)
+
+if (outPath) {
+    fs.writeFileSync(fullOutPath, HTML)
+}

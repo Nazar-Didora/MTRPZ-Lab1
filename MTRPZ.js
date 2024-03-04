@@ -129,12 +129,6 @@ const parseMarkdown = (markdown) => {
             newParagraphs.push(i)
         }
     }
-     console.log("italics",italics,);
-     console.log("bolds",bolds);
-     console.log("preformatteds",preformatteds);
-     console.log("newParagraphs",newParagraphs);
-     console.log("monospaceds",monospaceds);
-
      const isCorrect = isMarkdownCorrect(
         bolds,
         italics,

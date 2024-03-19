@@ -217,10 +217,12 @@ const MARKDOWN = readFile()
 
 const HTML = parseMarkdown(MARKDOWN)
 if (!HTML) {
-    return
+   console.log("not valid markdown"); 
 }
 console.log('result:', HTML)
 
 if (outPath) {
     fs.writeFileSync(fullOutPath, HTML)
 }
+
+module.exports = {parseMarkdown}

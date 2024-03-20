@@ -98,7 +98,7 @@ const parseMarkdown = (markdown) => {
         const preformattedsCondition = (markSymbolsCheck(i - 1) || markSymbolsCheck(i + 3)) &&
         markdown[i] === '`' &&
         markdown[i + 1] === '`' &&
-        markdown[i + 2] === '`' 
+        markdown[i + 4] === '`' 
 
         const monospacedsCondition = (markSymbolsCheck(i - 1) || markSymbolsCheck(i + 1)) && 
         markdown[i] === '`'

@@ -103,7 +103,7 @@ const parseMarkdown = (markdown) => {
         const monospacedsCondition = (markSymbolsCheck(i - 1) || markSymbolsCheck(i + 1)) && 
         markdown[i] === '`'
         
-        const newParagraphsCondition = (markSymbolsCheck(i - 1) || markSymbolsCheck(i + 2)) &&
+        const newParagraphsCondition =  
         markdown[i] === '\n' &&
         markdown[i + 1] === '\n' 
 
